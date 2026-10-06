@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>水彩调色助手</title>
+<meta name="description" content="上传参考图，自动识别色块、给出水彩调色配方、技法建议与作画顺序。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='10' cy='10' r='8' fill='%234F6FA8' opacity='.85'/%3E%3Ccircle cx='22' cy='10' r='8' fill='%23E6DE45' opacity='.85'/%3E%3Ccircle cx='16' cy='22' r='8' fill='%239C2850' opacity='.85'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <span class="dots"><i style="--c:#4F6FA8"></i><i style="--c:#E6DE45"></i><i style="--c:#9C2850"></i></span>
+    <div>
+      <h1>水彩调色助手</h1>
+      <p>上传参考图 → 色块识别 · 调色配方 · 技法建议 · 作画顺序</p>
+    </div>
+  </div>
+  <button id="paletteBtn" class="ghost">我的颜料盘</button>
+</header>
+
+<main>
+  <section id="drop" class="drop">
+    <input id="file" type="file" accept="image/*" hidden>
+    <div class="drop-inner">
+      <div class="drop-icon">🖌️</div>
+      <p><b>点击或拖入一张参考图</b></p>
+      <p class="muted">图片只在你的浏览器里分析，不会上传到任何服务器</p>
+      <button id="demoBtn" class="ghost small" type="button">没有图？用示例试试</button>
+    </div>
+  </section>
+
+  <section id="workspace" hidden>
+    <div class="controls">
+      <label>色块数量 <input id="kRange" type="range" min="4" max="14" value="8"> <b id="kVal">8</b></label>
+      <div class="seg" id="viewSeg">
+        <button data-view="orig" class="on">原图</button>
+        <button data-view="blocks">色块</button>
+        <button data-view="v3">三阶明度</button>
+        <button data-view="v5">五阶明度</button>
+        <button data-view="v2">黑白 Notan</button>
+      </div>
+      <button id="newImg" class="ghost small">换一张图</button>
+    </div>
+
+    <div class="grid">
+      <div class="left">
+        <div class="canvas-wrap">
+          <canvas id="view"></canvas>
+          <div id="pickInfo" class="pick" hidden></div>
+        </div>
+        <p class="muted small">提示：点击图上任意位置，可单独查看该点颜色的调法。</p>
+        <div class="card" id="overview"></div>
+      </div>
+
+      <div class="right">
+        <nav class="tabs" id="tabs">
+          <button data-tab="colors" class="on">调色配方</button>
+          <button data-tab="plan">作画顺序</button>
+          <button data-tab="tips">题材与规则</button>
+        </nav>
+        <div id="tab-colors" class="tab"></div>
+        <div id="tab-plan" class="tab" hidden></div>
+        <div id="tab-tips" class="tab" hidden></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dialog id="paletteDlg">
+  <form method="dialog">
+    <h2>我的颜料盘</h2>
+    <p class="muted small">配方只会用你勾选的颜料。色值默认来自知识库的近似色卡——用你手头颜料画一条色卡、拍照取色后填进来，配方会更准。</p>
+    <div class="presets" id="presets"></div>
+    <div id="pigList" class="pig-list"></div>
+    <div class="dlg-actions">
+      <button type="button" id="resetPig" class="ghost small">恢复默认色值</button>
+      <button value="ok" class="primary">完成</button>
+    </div>
+  </form>
+</dialog>
+
+<footer class="foot">
+  配方由近似 Kubelka–Munk 混色模型计算，仅供参考，请先在废纸上试色。知识来源：作者的水彩知识库。
+</footer>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
